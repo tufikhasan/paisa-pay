@@ -76,6 +76,101 @@ curl -X POST http://your-app.com/api/paisa/payment \
   }'
 ```
 
+## Using the PaisaPay Facade
+
+The package provides a convenient facade for easy access to payment functionality:
+
+### Facade Usage Examples
+
+```php
+use PaisaPay; // The facade is auto-registered
+
+// Process a payment
+$transaction = PaisaPay::processPayment([
+    'amount' => 99.99,
+    'payment_type' => 'stripe',
+    'user_id' => 1,
+    'type' => 'one-time',
+    'currency' => 'USD',
+    'metadata' => [
+        'order_id' => 'ORD-2024-001',
+        'description' => 'Premium Plan Purchase'
+    ]
+]);
+
+// Refund a transaction
+$refund = PaisaPay::refundTransaction('stripe_abc123', 50.00);
+
+// Verify payment status
+$verification = PaisaPay::verifyTransaction('stripe_abc123');
+
+// Get transaction details
+$transaction = PaisaPay::getTransaction('stripe_abc123');
+
+// Get a specific gateway instance
+$stripeGateway = PaisaPay::getGateway('stripe');
+```
+
+### Facade in Controllers
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use PaisaPay;
+use Illuminate\Http\Request;
+
+class PaymentController extends Controller
+{
+    public function processPayment(Request $request)
+    {
+        try {
+            $transaction = PaisaPay::processPayment([
+                'amount' => $request->amount,
+                'payment_type' => $request->payment_type,
+                'user_id' => auth()->id(),
+                'type' => $request->type ?? 'one-time',
+                'currency' => $request->currency ?? 'USD',
+                'metadata' => $request->metadata ?? []
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'transaction_id' => $transaction->transaction_id,
+                'status' => $transaction->status,
+                'amount' => $transaction->amount
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function refund(Request $request, $transactionId)
+    {
+        try {
+            $refund = PaisaPay::refundTransaction($transactionId, $request->amount);
+
+            return response()->json([
+                'success' => $refund['success'],
+                'message' => $refund['success'] ? 'Refund processed successfully' : 'Refund failed',
+                'data' => $refund
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+}
+```
+
 ## Subscription Payments
 
 ### Monthly Subscription Setup

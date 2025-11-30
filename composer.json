@@ -22,7 +22,10 @@
         "laravel": {
             "providers": [
                 "Towfik\\PaisaPay\\PaisaServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "PaisaPay": "Towfik\\PaisaPay\\Facades\\PaisaPay"
+            }
         }
     },
     "minimum-stability": "stable",

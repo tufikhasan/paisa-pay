@@ -233,7 +233,52 @@ The package provides the following API endpoints:
 
 ### Programmatic Usage
 
-You can also use the PaymentService directly in your code:
+You can use the PaymentService through the convenient PaisaPay facade or directly:
+
+#### Using the PaisaPay Facade (Recommended)
+
+```php
+use PaisaPay; // Facade is auto-loaded
+
+// Process a payment
+$transaction = PaisaPay::processPayment([
+    'amount' => 100.00,
+    'payment_type' => 'stripe',
+    'user_id' => 1,
+    'type' => 'subscription',
+    'currency' => 'USD',
+]);
+
+// Refund a transaction
+$response = PaisaPay::refundTransaction('stripe_abc123', 50.00);
+
+// Verify a transaction
+$response = PaisaPay::verifyTransaction('stripe_abc123');
+
+// Get transaction details
+$transaction = PaisaPay::getTransaction('stripe_abc123');
+```
+
+#### Using Dependency Injection
+
+```php
+use Towfik\PaisaPay\Services\PaymentService;
+
+class PaymentController extends Controller
+{
+    public function __construct(
+        protected PaymentService $paymentService
+    ) {}
+
+    public function process(Request $request)
+    {
+        $transaction = $this->paymentService->processPayment($request->validated());
+        return response()->json(['transaction' => $transaction]);
+    }
+}
+```
+
+#### Using Service Container
 
 ```php
 use Towfik\PaisaPay\Services\PaymentService;
@@ -248,15 +293,6 @@ $transaction = $paymentService->processPayment([
     'type' => 'subscription',
     'currency' => 'USD',
 ]);
-
-// Refund a transaction
-$response = $paymentService->refundTransaction('stripe_abc123', 50.00);
-
-// Verify a transaction
-$response = $paymentService->verifyTransaction('stripe_abc123');
-
-// Get transaction details
-$transaction = $paymentService->getTransaction('stripe_abc123');
 ```
 
 ## Supported Payment Gateways
