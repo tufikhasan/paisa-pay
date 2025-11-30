@@ -23,7 +23,7 @@ This guide provides step-by-step instructions for installing the Paisa Laravel P
         }
     ],
     "require": {
-        "towfik/paisa-pay": "dev-main"
+        "tufikhasan/paisa-pay": "dev-main"
     }
 }
 ```
@@ -37,7 +37,7 @@ composer update
 ### Method 2: Install via Composer (if published to Packagist)
 
 ```bash
-composer require towfik/paisa-pay
+composer require tufikhasan/paisa-pay
 ```
 
 ### Method 3: Local Development Installation
@@ -61,7 +61,7 @@ git clone https://github.com/tufikhasan/paisa-pay.git
         }
     ],
     "require": {
-        "towfik/paisa-pay": "*"
+        "tufikhasan/paisa-pay": "*"
     }
 }
 ```

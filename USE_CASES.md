@@ -20,8 +20,8 @@ This document provides practical examples and use cases for the Paisa Laravel Pa
 ### One-time Payment
 
 ```php
-use Towfik\PaisaPay\Services\PaymentService;
-use Towfik\PaisaPay\Models\Transaction;
+use TufikHasan\PaisaPay\Services\PaymentService;
+use TufikHasan\PaisaPay\Models\Transaction;
 
 class PaymentController extends Controller
 {

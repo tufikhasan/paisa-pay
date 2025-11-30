@@ -1,17 +1,17 @@
 <?php
 
-namespace Towfik\PaisaPay\Facades;
+namespace TufikHasan\PaisaPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Towfik\PaisaPay\Models\Transaction processPayment(array $data)
+ * @method static \TufikHasan\PaisaPay\Models\Transaction processPayment(array $data)
  * @method static array refundTransaction(string $transactionId, ?float $amount = null)
  * @method static array verifyTransaction(string $transactionId)
- * @method static \Towfik\PaisaPay\Models\Transaction getTransaction(string $transactionId)
- * @method static \Towfik\PaisaPay\Contracts\PaymentGatewayInterface getGateway(string $gateway)
+ * @method static \TufikHasan\PaisaPay\Models\Transaction getTransaction(string $transactionId)
+ * @method static \TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface getGateway(string $gateway)
  *
- * @see \Towfik\PaisaPay\Services\PaymentService
+ * @see \TufikHasan\PaisaPay\Services\PaymentService
  */
 class PaisaPay extends Facade
 {
@@ -20,6 +20,6 @@ class PaisaPay extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return Towfik\PaisaPay\Services\PaymentService::class;
+        return TufikHasan\PaisaPay\Services\PaymentService::class;
     }
 }

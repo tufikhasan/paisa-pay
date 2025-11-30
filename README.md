@@ -32,7 +32,7 @@ Add the package repository to your `composer.json`:
     }
 ],
 "require": {
-    "towfik/paisa-pay": "dev-main"
+    "tufikhasan/paisa-pay": "dev-main"
 }
 ```
 
@@ -45,7 +45,7 @@ composer update
 ### Option 2: Install via Composer (if published to Packagist)
 
 ```bash
-composer require towfik/paisa-pay
+composer require tufikhasan/paisa-pay
 ```
 
 ### Option 3: Local Development Installation
@@ -60,7 +60,7 @@ If you're developing locally, add the package repository to your `composer.json`
     }
 ],
 "require": {
-    "towfik/paisa-pay": "*"
+    "tufikhasan/paisa-pay": "*"
 }
 ```
 
@@ -262,7 +262,7 @@ $transaction = PaisaPay::getTransaction('stripe_abc123');
 #### Using Dependency Injection
 
 ```php
-use Towfik\PaisaPay\Services\PaymentService;
+use TufikHasan\PaisaPay\Services\PaymentService;
 
 class PaymentController extends Controller
 {
@@ -281,7 +281,7 @@ class PaymentController extends Controller
 #### Using Service Container
 
 ```php
-use Towfik\PaisaPay\Services\PaymentService;
+use TufikHasan\PaisaPay\Services\PaymentService;
 
 $paymentService = app(PaymentService::class);
 

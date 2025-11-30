@@ -1,6 +1,6 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Http\Requests;
+namespace TufikHasan\PaisaPay\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

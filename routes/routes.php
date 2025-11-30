@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Towfik\PaisaPayPay\Http\Controllers\PaymentController;
+use TufikHasan\PaisaPay\Http\Controllers\PaymentController;
 
 Route::prefix('api/paisa')->group(function () {
     // Process payment

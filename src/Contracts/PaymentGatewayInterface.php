@@ -1,6 +1,6 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Contracts;
+namespace TufikHasan\PaisaPay\Contracts;
 
 interface PaymentGatewayInterface
 {

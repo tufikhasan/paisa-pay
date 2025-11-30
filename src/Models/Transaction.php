@@ -1,6 +1,6 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Models;
+namespace TufikHasan\PaisaPay\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

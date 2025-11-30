@@ -1,6 +1,6 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Http\Resources;
+namespace TufikHasan\PaisaPay\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

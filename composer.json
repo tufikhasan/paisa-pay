@@ -1,5 +1,5 @@
 {
-    "name": "towfik/paisa-pay",
+    "name": "tufikhasan/paisa-pay",
     "description": "A Laravel payment package supporting multiple payment gateways",
     "type": "library",
     "license": "MIT",
@@ -15,16 +15,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Towfik\\PaisaPay\\": "src/"
+            "TufikHasan\\PaisaPay\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Towfik\\PaisaPay\\PaisaPayServiceProvider"
+                "TufikHasan\\PaisaPay\\PaisaPayServiceProvider"
             ],
             "aliases": {
-                "PaisaPay": "Towfik\\PaisaPay\\Facades\\PaisaPay"
+                "PaisaPay": "TufikHasan\\PaisaPay\\Facades\\PaisaPay"
             }
         }
     },

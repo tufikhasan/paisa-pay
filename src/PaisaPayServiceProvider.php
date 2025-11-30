@@ -1,6 +1,6 @@
 <?php
 
-namespace Towfik\PaisaPay;
+namespace TufikHasan\PaisaPay;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -17,8 +17,8 @@ class PaisaPayServiceProvider extends ServiceProvider
         );
 
         // Register the PaymentService
-        $this->app->singleton(\Towfik\PaisaPay\Services\PaymentService::class, function ($app) {
-            return new \Towfik\PaisaPay\Services\PaymentService();
+        $this->app->singleton(\TufikHasan\PaisaPay\Services\PaymentService::class, function ($app) {
+            return new \TufikHasan\PaisaPay\Services\PaymentService();
         });
     }
 

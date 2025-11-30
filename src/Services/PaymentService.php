@@ -1,12 +1,12 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Services;
+namespace TufikHasan\PaisaPay\Services;
 
-use Towfik\PaisaPayPay\Contracts\PaymentGatewayInterface;
-use Towfik\PaisaPayPay\Gateways\StripeGateway;
-use Towfik\PaisaPayPay\Gateways\PaypalGateway;
-use Towfik\PaisaPayPay\Gateways\BkashGateway;
-use Towfik\PaisaPayPay\Models\Transaction;
+use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
+use TufikHasan\PaisaPay\Gateways\StripeGateway;
+use TufikHasan\PaisaPay\Gateways\PaypalGateway;
+use TufikHasan\PaisaPay\Gateways\BkashGateway;
+use TufikHasan\PaisaPay\Models\Transaction;
 use Exception;
 
 class PaymentService

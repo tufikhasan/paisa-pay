@@ -1,10 +1,10 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Http\Controllers;
+namespace TufikHasan\PaisaPay\Http\Controllers;
 
-use Towfik\PaisaPayPay\Http\Requests\PaymentRequest;
-use Towfik\PaisaPayPay\Http\Resources\TransactionResource;
-use Towfik\PaisaPayPay\Services\PaymentService;
+use TufikHasan\PaisaPay\Http\Requests\PaymentRequest;
+use TufikHasan\PaisaPay\Http\Resources\TransactionResource;
+use TufikHasan\PaisaPay\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Exception;

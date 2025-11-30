@@ -1,8 +1,8 @@
 <?php
 
-namespace Towfik\PaisaPayPay\Gateways;
+namespace TufikHasan\PaisaPay\Gateways;
 
-use Towfik\PaisaPayPay\Contracts\PaymentGatewayInterface;
+use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use Exception;
 
 class PaypalGateway implements PaymentGatewayInterface
