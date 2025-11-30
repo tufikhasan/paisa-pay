@@ -21,7 +21,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Towfik\\PaisaPay\\PaisaServiceProvider"
+                "Towfik\\PaisaPay\\PaisaPayServiceProvider"
             ],
             "aliases": {
                 "PaisaPay": "Towfik\\PaisaPay\\Facades\\PaisaPay"
