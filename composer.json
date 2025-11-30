@@ -1,0 +1,30 @@
+{
+    "name": "towfik/paisa-pay",
+    "description": "A Laravel payment package supporting multiple payment gateways",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paisa Pay Package",
+            "email": "tufikhasan05@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Towfik\\PaisaPay\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Towfik\\PaisaPay\\PaisaServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

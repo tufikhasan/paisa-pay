@@ -1,0 +1,52 @@
+<?php
+
+namespace Towfik\PaisaPayPay\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class PaymentRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'amount' => ['required', 'numeric', 'min:0.01'],
+            'payment_type' => ['required', 'string', 'in:stripe,paypal,bkash'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'type' => ['required', 'string', 'max:255'],
+            'currency' => ['nullable', 'string', 'size:3'],
+            'metadata' => ['nullable', 'array'],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'amount.required' => 'Payment amount is required.',
+            'amount.numeric' => 'Payment amount must be a number.',
+            'amount.min' => 'Payment amount must be at least 0.01.',
+            'payment_type.required' => 'Payment type is required.',
+            'payment_type.in' => 'Payment type must be one of: stripe, paypal, bkash.',
+            'user_id.required' => 'User ID is required.',
+            'user_id.exists' => 'The specified user does not exist.',
+            'type.required' => 'Transaction type is required.',
+        ];
+    }
+}
