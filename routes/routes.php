@@ -11,7 +11,6 @@ Route::prefix('api/paisa-pay')->name('paisa-pay.')->group(function () {
     // Verify transaction
     Route::get('/verify/{transactionId}', [PaymentController::class, 'verifyTransaction'])->name('transaction.verify');
 
-    Route::get('/failed', function () {
-        return "Failed";
-    })->name('failed');
+    // Payment failed page
+    Route::view('/failed', 'paisapay::payment-failed')->name('failed');
 });

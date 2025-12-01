@@ -27,6 +27,9 @@ class PaisaPayServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Load views
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'paisapay');
+
         // Publish configuration
         $this->publishes([
             __DIR__ . '/../config/paisapay.php' => config_path('paisapay.php'),
@@ -36,6 +39,11 @@ class PaisaPayServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], 'paisapay-migrations');
+
+        // Publish views
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/paisapay'),
+        ], 'paisapay-views');
 
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
