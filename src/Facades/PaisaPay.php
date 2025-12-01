@@ -7,7 +7,6 @@ use TufikHasan\PaisaPay\Services\PaymentService;
 
 /**
  * @method static \TufikHasan\PaisaPay\Models\Transaction processPayment(array $data)
- * @method static array refundTransaction(string $transactionId, ?float $amount = null)
  * @method static array verifyTransaction(string $transactionId)
  * @method static \TufikHasan\PaisaPay\Models\Transaction getTransaction(string $transactionId)
  * @method static \TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface getGateway(string $gateway)
