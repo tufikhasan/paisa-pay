@@ -128,6 +128,10 @@
             color: #047857;
             font-size: 14px;
             font-weight: 500;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            text-align: right;
+            max-width: 60%;
         }
 
         .amount {
