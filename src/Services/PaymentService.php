@@ -34,7 +34,7 @@ class PaymentService
         $paymentData = [
             'amount' => $data['amount'],
             'currency' => $data['currency'],
-            'metadata' => $data['metadata'],
+            'metadata' => $data['metadata'] ?? [],
         ];
 
         // Charge the payment
@@ -57,7 +57,7 @@ class PaymentService
         // Return transaction with checkout URL if available
         return [
             'transaction' => $transaction,
-            'checkout_url' => $response['checkout_url'],
+            'checkout_url' => $response['checkout_url'] ?? null,
             'gateway_response' => $response,
         ];
     }
@@ -97,7 +97,20 @@ class PaymentService
         $transaction = Transaction::where('transaction_id', $transactionId)->firstOrFail();
         $gateway = $this->getGateway($transaction->payment_gateway);
 
-        return $gateway->verify($transactionId);
+        $response = $gateway->verify($transactionId);
+
+        // Update transaction if verification was successful
+        if ($response['success'] && $response['status'] === 'completed') {
+            $transaction->update([
+                'status' => 'completed',
+                'metadata' => array_merge(
+                    $transaction->metadata ?? [],
+                    ['verification_response' => $response]
+                ),
+            ]);
+        }
+
+        return $response;
     }
 
     /**
