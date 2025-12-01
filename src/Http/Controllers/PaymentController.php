@@ -81,4 +81,8 @@ class PaymentController extends Controller
             ], 400);
         }
     }
+    public function failed()
+    {
+        return view('paisapay::payment-failed');
+    }
 }

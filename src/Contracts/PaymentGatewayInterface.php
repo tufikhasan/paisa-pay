@@ -6,12 +6,12 @@ interface PaymentGatewayInterface
 {
 
     /**
-     * Process a payment charge.
+     * Process a payment pay.
      *
      * @param array $data Payment data including amount, currency, metadata
      * @return array Response with transaction_id, status, and other details
      */
-    public function charge(array $data): array;
+    public function pay(array $data): array;
 
     /**
      * Verify a payment transaction.

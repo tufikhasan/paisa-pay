@@ -3,25 +3,28 @@
 namespace TufikHasan\PaisaPay\Gateways;
 
 use Exception;
-use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
-use \Stripe\Stripe;
 
-class StripeGateway implements PaymentGatewayInterface
+class StripeGateway extends AbstractGateway
 {
-    protected array $config;
-
-    public function __construct(array $config)
+    public function getName(): string
     {
-        $this->config = $config;
-        Stripe::setApiKey($this->config['secret_key']);
+        return 'stripe';
+    }
+
+    public function init(array $config): void
+    {
+        \Stripe\Stripe::setApiKey($config['secret_key']);
     }
 
     /**
-     * Process a payment charge via Stripe.
+     * Process a payment pay via Stripe.
      */
-    public function charge(array $data): array
+    public function pay(array $data): array
     {
         try {
+            // Validate currency is supported
+            $this->validateCurrency($data['currency']);
+
             $currency = strtolower($data['currency']);
             $amount = (float) ($data['amount'] * 100);
 
@@ -102,13 +105,5 @@ class StripeGateway implements PaymentGatewayInterface
                 'gateway' => $this->getName(),
             ];
         }
-    }
-
-    /**
-     * Get the gateway name.
-     */
-    public function getName(): string
-    {
-        return 'stripe';
     }
 }
