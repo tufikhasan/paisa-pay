@@ -12,7 +12,7 @@ class PaisaPayServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/paisa.php',
+            __DIR__ . '/../config/paisapay.php',
             'paisa'
         );
 
@@ -29,7 +29,7 @@ class PaisaPayServiceProvider extends ServiceProvider
     {
         // Publish configuration
         $this->publishes([
-            __DIR__ . '/../config/paisa.php' => config_path('paisa.php'),
+            __DIR__ . '/../config/paisapay.php' => config_path('paisapay.php'),
         ], 'paisa-config');
 
         // Publish migrations

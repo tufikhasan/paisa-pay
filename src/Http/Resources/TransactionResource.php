@@ -18,7 +18,6 @@ class TransactionResource extends JsonResource
             'id' => $this->id,
             'transaction_id' => $this->transaction_id,
             'amount' => (float) $this->amount,
-            'user_id' => $this->user_id,
             'type' => $this->type,
             'payment_gateway' => $this->payment_gateway,
             'status' => $this->status,

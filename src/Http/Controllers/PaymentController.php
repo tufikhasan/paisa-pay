@@ -18,18 +18,16 @@ class PaymentController extends Controller
         $this->paymentService = $paymentService;
     }
 
-    /**
-     * Process a payment.
-     */
     public function processPayment(PaymentRequest $request): JsonResponse
     {
         try {
-            $transaction = $this->paymentService->processPayment($request->validated());
+            $result = $this->paymentService->processPayment($request->validated());
 
             return response()->json([
                 'success' => true,
                 'message' => 'Payment processed successfully.',
-                'data' => new TransactionResource($transaction),
+                'data' => new TransactionResource($result['transaction']),
+                'checkout_url' => $result['checkout_url'],
             ], 201);
         } catch (Exception $e) {
             return response()->json([

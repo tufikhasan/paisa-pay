@@ -136,7 +136,6 @@ The package provides the following API endpoints:
 {
     "amount": 100.00,
     "payment_type": "stripe",
-    "user_id": 1,
     "type": "subscription",
     "currency": "USD",
     "metadata": {
@@ -155,7 +154,6 @@ The package provides the following API endpoints:
         "id": 1,
         "transaction_id": "stripe_abc123",
         "amount": 100.00,
-        "user_id": 1,
         "type": "subscription",
         "payment_gateway": "stripe",
         "status": "completed",
@@ -203,7 +201,6 @@ The package provides the following API endpoints:
         "id": 1,
         "transaction_id": "stripe_abc123",
         "amount": 100.00,
-        "user_id": 1,
         "type": "subscription",
         "payment_gateway": "stripe",
         "status": "completed",
@@ -244,7 +241,6 @@ use PaisaPay; // Facade is auto-loaded
 $transaction = PaisaPay::processPayment([
     'amount' => 100.00,
     'payment_type' => 'stripe',
-    'user_id' => 1,
     'type' => 'subscription',
     'currency' => 'USD',
 ]);
@@ -289,7 +285,6 @@ $paymentService = app(PaymentService::class);
 $transaction = $paymentService->processPayment([
     'amount' => 100.00,
     'payment_type' => 'stripe',
-    'user_id' => 1,
     'type' => 'subscription',
     'currency' => 'USD',
 ]);
@@ -321,7 +316,6 @@ The package creates a `transactions` table with the following structure:
 | id | bigint | Primary key |
 | transaction_id | string | Unique transaction ID from gateway |
 | amount | decimal(10,2) | Transaction amount |
-| user_id | bigint | User who made the transaction |
 | type | string | Transaction type (subscription, one-time, etc.) |
 | payment_gateway | string | Gateway used (stripe, paypal, bkash) |
 | status | enum | Transaction status (pending, completed, failed, refunded) |

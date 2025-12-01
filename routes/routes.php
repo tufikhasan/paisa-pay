@@ -3,20 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use TufikHasan\PaisaPay\Http\Controllers\PaymentController;
 
-Route::prefix('api/paisa')->group(function () {
+Route::prefix('api/paisa-pay')->name('paisa-pay.')->group(function () {
     // Process payment
-    Route::post('/payment', [PaymentController::class, 'processPayment'])
-        ->name('paisa.payment.process');
-
+    Route::post('/payment', [PaymentController::class, 'processPayment'])->name('payment.process');
     // Refund transaction
-    Route::post('/refund/{transactionId}', [PaymentController::class, 'refundTransaction'])
-        ->name('paisa.payment.refund');
-
+    Route::post('/refund/{transactionId}', [PaymentController::class, 'refundTransaction'])->name('payment.refund');
     // Get transaction details
-    Route::get('/transaction/{transactionId}', [PaymentController::class, 'getTransaction'])
-        ->name('paisa.transaction.get');
-
+    Route::get('/transaction/{transactionId}', [PaymentController::class, 'getTransaction'])->name('transaction.get');
     // Verify transaction
-    Route::get('/verify/{transactionId}', [PaymentController::class, 'verifyTransaction'])
-        ->name('paisa.transaction.verify');
+    Route::get('/verify/{transactionId}', [PaymentController::class, 'verifyTransaction'])->name('transaction.verify');
+
+    Route::get('/failed', function () {
+        return "Failed";
+    })->name('failed');
 });

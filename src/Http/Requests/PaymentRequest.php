@@ -23,10 +23,9 @@ class PaymentRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'numeric', 'min:0.01'],
-            'payment_type' => ['required', 'string', 'in:stripe,paypal,bkash'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'type' => ['required', 'string', 'max:255'],
-            'currency' => ['nullable', 'string', 'size:3'],
+            'payment_gateway' => ['required', 'string', 'in:stripe,paypal,bkash'],
+            'type' => ['nullable', 'string', 'max:255'],
+            'currency' => ['required', 'string', 'size:3'],
             'metadata' => ['nullable', 'array'],
         ];
     }
@@ -42,10 +41,9 @@ class PaymentRequest extends FormRequest
             'amount.required' => 'Payment amount is required.',
             'amount.numeric' => 'Payment amount must be a number.',
             'amount.min' => 'Payment amount must be at least 0.01.',
-            'payment_type.required' => 'Payment type is required.',
-            'payment_type.in' => 'Payment type must be one of: stripe, paypal, bkash.',
-            'user_id.required' => 'User ID is required.',
-            'user_id.exists' => 'The specified user does not exist.',
+            'currency.required' => 'Currency is required.',
+            'payment_gateway.required' => 'Payment type is required.',
+            'payment_gateway.in' => 'Payment type must be one of: stripe, paypal, bkash.',
             'type.required' => 'Transaction type is required.',
         ];
     }

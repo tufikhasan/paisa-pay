@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_id')->unique()->comment('Unique transaction ID from payment gateway');
+            $table->string('transaction_id')->nullable()->unique()->comment('Unique transaction ID from payment gateway');
             $table->decimal('amount', 10, 2)->comment('Transaction amount');
-            $table->unsignedBigInteger('user_id')->comment('User who made the transaction');
+            $table->string('currency');
             $table->string('type')->comment('Transaction type: subscription, one-time, etc.');
             $table->string('payment_gateway')->comment('Payment gateway used: stripe, paypal, bkash');
             $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->timestamps();
 
             // Indexes
-            $table->index('user_id');
             $table->index('payment_gateway');
             $table->index('status');
             $table->index('created_at');

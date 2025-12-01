@@ -4,6 +4,7 @@ namespace TufikHasan\PaisaPay\Contracts;
 
 interface PaymentGatewayInterface
 {
+
     /**
      * Process a payment charge.
      *

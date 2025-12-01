@@ -4,8 +4,6 @@ namespace TufikHasan\PaisaPay\Services;
 
 use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use TufikHasan\PaisaPay\Gateways\StripeGateway;
-use TufikHasan\PaisaPay\Gateways\PaypalGateway;
-use TufikHasan\PaisaPay\Gateways\BkashGateway;
 use TufikHasan\PaisaPay\Models\Transaction;
 use Exception;
 
@@ -16,7 +14,7 @@ class PaymentService
      */
     public function getGateway(string $gateway): PaymentGatewayInterface
     {
-        $config = config("paisa.gateways.{$gateway}");
+        $config = config("paisapay.gateways.{$gateway}");
 
         if (!$config || !($config['enabled'] ?? false)) {
             throw new Exception("Payment gateway '{$gateway}' is not enabled or configured.");
@@ -24,24 +22,19 @@ class PaymentService
 
         return match ($gateway) {
             'stripe' => new StripeGateway($config),
-            'paypal' => new PaypalGateway($config),
-            'bkash' => new BkashGateway($config),
             default => throw new Exception("Unsupported payment gateway: {$gateway}"),
         };
     }
 
-    /**
-     * Process a payment.
-     */
-    public function processPayment(array $data): Transaction
+    public function processPayment(array $data): array
     {
-        $gateway = $this->getGateway($data['payment_type']);
+        $gateway = $this->getGateway($data['payment_gateway']);
 
         // Prepare payment data
         $paymentData = [
             'amount' => $data['amount'],
-            'currency' => $data['currency'] ?? config('paisa.currency'),
-            'metadata' => $data['metadata'] ?? [],
+            'currency' => $data['currency'],
+            'metadata' => $data['metadata'],
         ];
 
         // Charge the payment
@@ -51,17 +44,21 @@ class PaymentService
         $transaction = Transaction::create([
             'transaction_id' => $response['transaction_id'] ?? 'pending_' . uniqid(),
             'amount' => $data['amount'],
-            'user_id' => $data['user_id'],
             'type' => $data['type'] ?? 'one-time',
             'payment_gateway' => $data['payment_type'],
-            'status' => $response['success'] ? 'completed' : 'failed',
+            'status' => $response['success'] ? ($response['status'] ?? 'completed') : 'failed',
             'metadata' => array_merge(
                 $data['metadata'] ?? [],
                 ['gateway_response' => $response]
             ),
         ]);
 
-        return $transaction;
+        // Return transaction with checkout URL if available
+        return [
+            'transaction' => $transaction,
+            'checkout_url' => $response['checkout_url'] ?? null,
+            'gateway_response' => $response,
+        ];
     }
 
     /**
