@@ -138,7 +138,7 @@ Paisa Pay provides two ways to process payments: **Facade** (programmatic) and *
 ```php
 use TufikHasan\PaisaPay\Facades\PaisaPay;
 
-$result = PaisaPay::processPayment([
+$result = PaisaPay::payment([
     'amount' => 100.00,
     'currency' => 'USD',
     'payment_gateway' => 'stripe',
@@ -365,7 +365,7 @@ The package provides comprehensive error handling:
 ### Gateway Errors
 ```php
 try {
-    $result = PaisaPay::processPayment([...]);
+    $result = PaisaPay::payment([...]);
 } catch (\Exception $e) {
     // Handle error
     echo $e->getMessage();
@@ -415,7 +415,7 @@ class CheckoutController extends Controller
     
     public function checkout(Request $request)
     {
-        $result = $this->paymentService->processPayment([
+        $result = $this->paymentService->payment([
             'amount' => $request->amount,
             'currency' => 'USD',
             'payment_gateway' => 'stripe',
@@ -431,7 +431,7 @@ class CheckoutController extends Controller
 Store additional information with transactions:
 
 ```php
-PaisaPay::processPayment([
+PaisaPay::payment([
     'amount' => 100,
     'currency' => 'USD',
     'payment_gateway' => 'stripe',

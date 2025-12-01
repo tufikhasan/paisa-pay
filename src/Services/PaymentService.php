@@ -33,7 +33,7 @@ class PaymentService
         };
     }
 
-    public function processPayment(array $data): array
+    public function payment(array $data): array
     {
         $gateway = $this->getGateway($data['payment_gateway']);
 

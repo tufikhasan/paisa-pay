@@ -18,10 +18,10 @@ class PaymentController extends Controller
         $this->paymentService = $paymentService;
     }
 
-    public function processPayment(PaymentRequest $request): JsonResponse
+    public function payment(PaymentRequest $request): JsonResponse
     {
         try {
-            $result = $this->paymentService->processPayment($request->validated());
+            $result = $this->paymentService->payment($request->validated());
 
             return response()->json([
                 'success' => true,

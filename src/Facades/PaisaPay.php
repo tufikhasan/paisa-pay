@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 use TufikHasan\PaisaPay\Services\PaymentService;
 
 /**
- * @method static \TufikHasan\PaisaPay\Models\Transaction processPayment(array $data)
+ * @method static \TufikHasan\PaisaPay\Models\Transaction payment(array $data)
  * @method static array verifyTransaction(string $transactionId)
  * @method static \TufikHasan\PaisaPay\Models\Transaction getTransaction(string $transactionId)
  * @method static \TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface getGateway(string $gateway)
