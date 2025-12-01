@@ -62,25 +62,29 @@ class PaymentController extends Controller
     /**
      * Verify a transaction.
      */
-    public function verifyTransaction(string $transactionId): JsonResponse
+    public function verifyTransaction(string $transactionId)
     {
         try {
-
             $response = $this->paymentService->verifyTransaction($transactionId);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Transaction verified successfully.',
-                'data' => $response,
-            ]);
+            // Get the transaction
+            $transaction = $this->paymentService->getTransaction($transactionId);
+
+            // Check if verification was successful
+            if ($response['success'] && $response['status'] === 'completed') {
+                return view('paisapay::payment-success', compact('transaction'));
+            } else {
+                return redirect()->route('paisa-pay.failed', [
+                    'error' => $response['error'] ?? 'Payment verification failed'
+                ]);
+            }
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Transaction verification failed.',
-                'error' => $e->getMessage(),
-            ], 400);
+            return redirect()->route('paisa-pay.failed', [
+                'error' => 'Payment verification failed',
+            ]);
         }
     }
+
     public function failed()
     {
         return view('paisapay::payment-failed');

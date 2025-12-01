@@ -51,8 +51,8 @@ enum PaymentGateway: string
     /**
      * Check if gateway is enabled in config.
      */
-    public function isEnabled(): bool
+    public static function isEnabled(string $value): bool
     {
-        return config("paisapay.gateways.{$this->value}.enabled", false);
+        return config("paisapay.gateways.{$value}.enabled", false);
     }
 }
