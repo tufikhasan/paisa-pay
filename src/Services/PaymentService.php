@@ -54,7 +54,10 @@ class PaymentService
                 'type' => $data['type'] ?? 'one-time',
                 'payment_gateway' => $data['payment_gateway'],
                 'status' => $response['status'],
-                'metadata' => $response,
+                'metadata' => array_merge(
+                    $data['metadata'] ?? [],
+                    ['gateway_response' => $response]
+                ),
             ]);
         });
 
@@ -99,10 +102,14 @@ class PaymentService
 
         // Update transaction if verification was successful
         if ($response['success'] && $response['status'] === 'completed') {
+            $metadata = $transaction->metadata ?? [];
+            $metadata['gateway_response'] = $response;
+
             $transaction->update([
                 'status' => 'completed',
-                'metadata' => $response,
+                'metadata' => $metadata,
             ]);
+
         }
 
         return $response;
