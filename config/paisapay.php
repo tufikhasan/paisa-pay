@@ -17,17 +17,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Currency
-    |--------------------------------------------------------------------------
-    |
-    | The default currency for transactions.
-    |
-    */
-
-    'currency' => env('PAISA_PAY_CURRENCY', 'USD'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Payment Gateways
     |--------------------------------------------------------------------------
     |
@@ -41,6 +30,9 @@ return [
         'stripe' => [
             'enabled' => env('STRIPE_ENABLED', false),
             'secret_key' => env('STRIPE_SECRET_KEY'),
+            'supported_currencies' => env('STRIPE_SUPPORTED_CURRENCIES')
+                ? explode(',', env('STRIPE_SUPPORTED_CURRENCIES'))
+                : ['USD', 'EUR', 'GBP', 'BDT'],
         ],
     ],
 ];

@@ -37,6 +37,9 @@ class PaymentService
     {
         $gateway = $this->getGateway($data['payment_gateway']);
 
+        // Validate currency is supported by the gateway
+        $this->validateCurrency($data['payment_gateway'], $data['currency']);
+
         // Charge the payment
         $response = $gateway->charge($data);
 
@@ -60,6 +63,28 @@ class PaymentService
             'checkout_url' => $response['checkout_url'] ?? null,
             'gateway_response' => $response,
         ];
+    }
+
+    /**
+     * Validate if currency is supported by the gateway.
+     */
+    protected function validateCurrency(string $gateway, string $currency): void
+    {
+        $supportedCurrencies = config("paisapay.gateways.{$gateway}.supported_currencies", []);
+
+        if (empty($supportedCurrencies)) {
+            return; // No currency restriction if not configured
+        }
+
+        $currency = strtoupper($currency);
+
+        if (!in_array($currency, $supportedCurrencies, true)) {
+            $supported = implode(', ', $supportedCurrencies);
+            throw new Exception(
+                "Currency '{$currency}' is not supported by {$gateway} gateway. " .
+                "Supported currencies: {$supported}"
+            );
+        }
     }
 
     /**
