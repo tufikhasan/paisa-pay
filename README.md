@@ -352,8 +352,6 @@ $transaction->user; // Get the user who made the transaction
 
 2. **Security**: Always validate and sanitize payment data. Use HTTPS in production.
 
-3. **Webhooks**: For production, implement webhook handlers to receive real-time payment status updates from payment gateways.
-
 4. **Testing**: Test thoroughly in sandbox/test mode before going live.
 
 ## License

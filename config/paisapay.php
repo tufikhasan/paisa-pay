@@ -40,43 +40,7 @@ return [
 
         'stripe' => [
             'enabled' => env('STRIPE_ENABLED', false),
-            'publishable_key' => env('STRIPE_PUBLISHABLE_KEY'),
             'secret_key' => env('STRIPE_SECRET_KEY'),
-            'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
         ],
-
-        'paypal' => [
-            'enabled' => env('PAYPAL_ENABLED', false),
-            'client_id' => env('PAYPAL_CLIENT_ID'),
-            'client_secret' => env('PAYPAL_CLIENT_SECRET'),
-            'mode' => env('PAYPAL_MODE', 'sandbox'), // sandbox or live
-            'webhook_id' => env('PAYPAL_WEBHOOK_ID'),
-        ],
-
-        'bkash' => [
-            'enabled' => env('BKASH_ENABLED', false),
-            'app_key' => env('BKASH_APP_KEY'),
-            'app_secret' => env('BKASH_APP_SECRET'),
-            'username' => env('BKASH_USERNAME'),
-            'password' => env('BKASH_PASSWORD'),
-            'base_url' => env('BKASH_BASE_URL', 'https://tokenized.sandbox.bka.sh/v1.2.0-beta'),
-        ],
-
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Webhook URLs
-    |--------------------------------------------------------------------------
-    |
-    | URLs for payment gateway webhooks.
-    |
-    */
-
-    'webhooks' => [
-        'stripe' => env('PAISA_PAY_STRIPE_WEBHOOK_URL', '/api/paisa/webhooks/stripe'),
-        'paypal' => env('PAISA_PAY_PAYPAL_WEBHOOK_URL', '/api/paisa/webhooks/paypal'),
-        'bkash' => env('PAISA_PAY_BKASH_WEBHOOK_URL', '/api/paisa/webhooks/bkash'),
-    ],
-
 ];

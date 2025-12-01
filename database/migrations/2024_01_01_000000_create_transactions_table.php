@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use TufikHasan\PaisaPay\Enums\PaymentGateway;
 
 return new class extends Migration {
     /**
@@ -16,7 +17,7 @@ return new class extends Migration {
             $table->decimal('amount', 10, 2)->comment('Transaction amount');
             $table->string('currency');
             $table->string('type')->comment('Transaction type: subscription, one-time, etc.');
-            $table->string('payment_gateway')->comment('Payment gateway used: stripe, paypal, bkash');
+            $table->enum('payment_gateway', PaymentGateway::values())->comment('Payment gateway used');
             $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
             $table->json('metadata')->nullable()->comment('Additional transaction data');
             $table->timestamps();

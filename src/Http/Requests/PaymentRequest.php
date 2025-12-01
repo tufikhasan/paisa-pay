@@ -3,6 +3,8 @@
 namespace TufikHasan\PaisaPay\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use TufikHasan\PaisaPay\Enums\PaymentGateway;
 
 class PaymentRequest extends FormRequest
 {
@@ -23,7 +25,7 @@ class PaymentRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'numeric', 'min:0.01'],
-            'payment_gateway' => ['required', 'string', 'in:stripe,paypal,bkash'],
+            'payment_gateway' => ['required', 'string', Rule::in(PaymentGateway::values())],
             'type' => ['nullable', 'string', 'max:255'],
             'currency' => ['required', 'string', 'size:3'],
             'metadata' => ['nullable', 'array'],
@@ -37,13 +39,15 @@ class PaymentRequest extends FormRequest
      */
     public function messages(): array
     {
+        $gateways = PaymentGateway::valuesString();
+
         return [
             'amount.required' => 'Payment amount is required.',
             'amount.numeric' => 'Payment amount must be a number.',
             'amount.min' => 'Payment amount must be at least 0.01.',
             'currency.required' => 'Currency is required.',
-            'payment_gateway.required' => 'Payment type is required.',
-            'payment_gateway.in' => 'Payment type must be one of: stripe, paypal, bkash.',
+            'payment_gateway.required' => 'Payment gateway is required.',
+            'payment_gateway.in' => "Payment gateway must be one of: {$gateways}.",
             'type.required' => 'Transaction type is required.',
         ];
     }

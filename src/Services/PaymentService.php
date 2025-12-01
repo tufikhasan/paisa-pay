@@ -5,6 +5,7 @@ namespace TufikHasan\PaisaPay\Services;
 use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use TufikHasan\PaisaPay\Gateways\StripeGateway;
 use TufikHasan\PaisaPay\Models\Transaction;
+use TufikHasan\PaisaPay\Enums\PaymentGateway;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,11 @@ class PaymentService
      */
     public function getGateway(string $gateway): PaymentGatewayInterface
     {
+        // Validate gateway is supported
+        if (!PaymentGateway::isValid($gateway)) {
+            throw new Exception("Unsupported payment gateway: {$gateway}. Supported gateways: " . PaymentGateway::valuesString());
+        }
+
         $config = config("paisapay.gateways.{$gateway}");
 
         if (!$config || !($config['enabled'] ?? false)) {
@@ -22,7 +28,7 @@ class PaymentService
         }
 
         return match ($gateway) {
-            'stripe' => new StripeGateway($config),
+            PaymentGateway::STRIPE->value => new StripeGateway($config),
             default => throw new Exception("Unsupported payment gateway: {$gateway}"),
         };
     }
