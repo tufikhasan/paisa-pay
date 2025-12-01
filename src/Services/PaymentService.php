@@ -6,6 +6,7 @@ use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use TufikHasan\PaisaPay\Gateways\StripeGateway;
 use TufikHasan\PaisaPay\Models\Transaction;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class PaymentService
 {
@@ -30,28 +31,24 @@ class PaymentService
     {
         $gateway = $this->getGateway($data['payment_gateway']);
 
-        // Prepare payment data
-        $paymentData = [
-            'amount' => $data['amount'],
-            'currency' => $data['currency'],
-            'metadata' => $data['metadata'] ?? [],
-        ];
-
         // Charge the payment
-        $response = $gateway->charge($paymentData);
+        $response = $gateway->charge($data);
+
+        $transaction = null;
 
         // Create transaction record
-        $transaction = Transaction::create([
-            'transaction_id' => $response['transaction_id'],
-            'amount' => $data['amount'],
-            'currency' => $data['currency'],
-            'type' => $data['type'] ?? 'one-time',
-            'payment_gateway' => $data['payment_gateway'],
-            'status' => $response['success'] ? ($response['status'] ?? 'completed') : 'failed',
-            'metadata' => $response,
-        ]);
+        DB::transaction(function () use (&$transaction, $response, $data) {
+            $transaction = Transaction::create([
+                'transaction_id' => $response['transaction_id'],
+                'amount' => $data['amount'],
+                'currency' => $data['currency'],
+                'type' => $data['type'] ?? 'one-time',
+                'payment_gateway' => $data['payment_gateway'],
+                'status' => $response['status'],
+                'metadata' => $response,
+            ]);
+        });
 
-        // Return transaction with checkout URL if available
         return [
             'transaction' => $transaction,
             'checkout_url' => $response['checkout_url'] ?? null,

@@ -22,7 +22,7 @@ class StripeGateway implements PaymentGatewayInterface
     public function charge(array $data): array
     {
         try {
-            $currency = strtolower($data['currency'] ?? 'USD');
+            $currency = strtolower($data['currency']);
             $amount = (int) ($data['amount'] * 100);
 
             $sessionConfig = [
@@ -33,11 +33,11 @@ class StripeGateway implements PaymentGatewayInterface
                             'currency' => $currency,
                             'unit_amount' => $amount,
                             'product_data' => [
-                                'name' => config('app.name'),
-                                'description' => 'Payment via Paisa Pay',
+                                'name' => $data['product_name'] ?? config('app.name'),
+                                'description' => $data['product_description'] ?? 'Payment via Paisa Pay',
                             ],
                         ],
-                        'quantity' => 1,
+                        'quantity' => $data['quantity'] ?? 1,
                     ],
                 ],
 

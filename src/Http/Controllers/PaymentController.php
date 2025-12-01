@@ -39,29 +39,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * Refund a transaction.
-     */
-    public function refundTransaction(string $transactionId): JsonResponse
-    {
-        try {
-            $amount = request('amount');
-            $response = $this->paymentService->refundTransaction($transactionId, $amount);
-
-            return response()->json([
-                'success' => $response['success'],
-                'message' => $response['success'] ? 'Refund processed successfully.' : 'Refund failed.',
-                'data' => $response,
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Refund processing failed.',
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    /**
      * Get transaction details.
      */
     public function getTransaction(string $transactionId): JsonResponse
@@ -88,7 +65,7 @@ class PaymentController extends Controller
     public function verifyTransaction(string $transactionId): JsonResponse
     {
         try {
-            
+
             $response = $this->paymentService->verifyTransaction($transactionId);
 
             return response()->json([
