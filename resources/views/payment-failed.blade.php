@@ -222,9 +222,6 @@
         @endif
 
         <div class="button-group">
-            <a href="{{ request()->get('retry_url') ?? url('/') }}" class="btn btn-primary">
-                Try Again
-            </a>
             <a href="{{ url('/') }}" class="btn btn-secondary">
                 Return to Home
             </a>
