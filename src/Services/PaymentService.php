@@ -44,8 +44,9 @@ class PaymentService
         $transaction = Transaction::create([
             'transaction_id' => $response['transaction_id'] ?? 'pending_' . uniqid(),
             'amount' => $data['amount'],
+            'currency' => $data['currency'],
             'type' => $data['type'] ?? 'one-time',
-            'payment_gateway' => $data['payment_type'],
+            'payment_gateway' => $data['payment_gateway'],
             'status' => $response['success'] ? ($response['status'] ?? 'completed') : 'failed',
             'metadata' => array_merge(
                 $data['metadata'] ?? [],
@@ -56,7 +57,7 @@ class PaymentService
         // Return transaction with checkout URL if available
         return [
             'transaction' => $transaction,
-            'checkout_url' => $response['checkout_url'] ?? null,
+            'checkout_url' => $response['checkout_url'],
             'gateway_response' => $response,
         ];
     }

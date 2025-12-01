@@ -3,6 +3,7 @@
 namespace TufikHasan\PaisaPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use TufikHasan\PaisaPay\Services\PaymentService;
 
 /**
  * @method static \TufikHasan\PaisaPay\Models\Transaction processPayment(array $data)
@@ -20,6 +21,6 @@ class PaisaPay extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return TufikHasan\PaisaPay\Services\PaymentService::class;
+        return PaymentService::class;
     }
 }

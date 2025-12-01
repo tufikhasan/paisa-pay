@@ -88,6 +88,7 @@ class PaymentController extends Controller
     public function verifyTransaction(string $transactionId): JsonResponse
     {
         try {
+            
             $response = $this->paymentService->verifyTransaction($transactionId);
 
             return response()->json([

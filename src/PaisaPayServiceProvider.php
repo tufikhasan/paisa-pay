@@ -13,7 +13,7 @@ class PaisaPayServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../config/paisapay.php',
-            'paisa'
+            'paisapay'
         );
 
         // Register the PaymentService
@@ -30,12 +30,12 @@ class PaisaPayServiceProvider extends ServiceProvider
         // Publish configuration
         $this->publishes([
             __DIR__ . '/../config/paisapay.php' => config_path('paisapay.php'),
-        ], 'paisa-config');
+        ], 'paisapay-config');
 
         // Publish migrations
         $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
-        ], 'paisa-migrations');
+        ], 'paisapay-migrations');
 
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
