@@ -23,7 +23,7 @@ class StripeGateway implements PaymentGatewayInterface
     {
         try {
             $currency = strtolower($data['currency']);
-            $amount = (int) ($data['amount'] * 100);
+            $amount = (float) ($data['amount'] * 100);
 
             $sessionConfig = [
                 'payment_method_types' => ['card'],
