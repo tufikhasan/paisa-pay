@@ -14,15 +14,6 @@ interface PaymentGatewayInterface
     public function charge(array $data): array;
 
     /**
-     * Refund a payment.
-     *
-     * @param string $transactionId The transaction ID to refund
-     * @param float|null $amount Optional partial refund amount
-     * @return array Response with refund status and details
-     */
-    public function refund(string $transactionId, ?float $amount = null): array;
-
-    /**
      * Verify a payment transaction.
      *
      * @param string $transactionId The transaction ID to verify

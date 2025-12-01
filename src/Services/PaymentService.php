@@ -42,16 +42,13 @@ class PaymentService
 
         // Create transaction record
         $transaction = Transaction::create([
-            'transaction_id' => $response['transaction_id'] ?? 'pending_' . uniqid(),
+            'transaction_id' => $response['transaction_id'],
             'amount' => $data['amount'],
             'currency' => $data['currency'],
             'type' => $data['type'] ?? 'one-time',
             'payment_gateway' => $data['payment_gateway'],
             'status' => $response['success'] ? ($response['status'] ?? 'completed') : 'failed',
-            'metadata' => array_merge(
-                $data['metadata'] ?? [],
-                ['gateway_response' => $response]
-            ),
+            'metadata' => $response,
         ]);
 
         // Return transaction with checkout URL if available
@@ -60,33 +57,6 @@ class PaymentService
             'checkout_url' => $response['checkout_url'] ?? null,
             'gateway_response' => $response,
         ];
-    }
-
-    /**
-     * Refund a transaction.
-     */
-    public function refundTransaction(string $transactionId, ?float $amount = null): array
-    {
-        $transaction = Transaction::where('transaction_id', $transactionId)->firstOrFail();
-
-        if ($transaction->status !== 'completed') {
-            throw new Exception('Only completed transactions can be refunded.');
-        }
-
-        $gateway = $this->getGateway($transaction->payment_gateway);
-        $response = $gateway->refund($transactionId, $amount);
-
-        if ($response['success']) {
-            $transaction->update([
-                'status' => 'refunded',
-                'metadata' => array_merge(
-                    $transaction->metadata ?? [],
-                    ['refund_response' => $response]
-                ),
-            ]);
-        }
-
-        return $response;
     }
 
     /**
@@ -103,10 +73,7 @@ class PaymentService
         if ($response['success'] && $response['status'] === 'completed') {
             $transaction->update([
                 'status' => 'completed',
-                'metadata' => array_merge(
-                    $transaction->metadata ?? [],
-                    ['verification_response' => $response]
-                ),
+                'metadata' => $response,
             ]);
         }
 
