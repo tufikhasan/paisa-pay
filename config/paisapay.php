@@ -17,6 +17,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default Currency
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default currency that will be used
+    | when processing payments if no currency is specified.
+    |
+    */
+
+    'default_currency' => env('PAISA_PAY_DEFAULT_CURRENCY', 'USD'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Payment Gateways
     |--------------------------------------------------------------------------
     |

@@ -2,24 +2,20 @@
 
 namespace TufikHasan\PaisaPay\Services;
 
+use Exception;
+use Illuminate\Support\Facades\Event;
 use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
-use TufikHasan\PaisaPay\Gateways\StripeGateway;
-use TufikHasan\PaisaPay\Models\Transaction;
 use TufikHasan\PaisaPay\Enums\PaymentGateway;
 use TufikHasan\PaisaPay\Events\TransactionCreated;
-use TufikHasan\PaisaPay\Events\TransactionVerifying;
 use TufikHasan\PaisaPay\Events\TransactionVerified;
-use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
+use TufikHasan\PaisaPay\Gateways\StripeGateway;
+use TufikHasan\PaisaPay\Models\Transaction;
 
-class PaymentService
-{
+class PaymentService {
     /**
      * Get payment gateway instance.
      */
-    public function getGateway(string $gateway): PaymentGatewayInterface
-    {
+    public function getGateway(string $gateway): PaymentGatewayInterface {
         // Validate gateway is supported
         if (!PaymentGateway::isValid($gateway)) {
             throw new Exception("Unsupported payment gateway: {$gateway}. Supported gateways: " . PaymentGateway::valuesString());
@@ -33,40 +29,36 @@ class PaymentService
 
         return match ($gateway) {
             PaymentGateway::STRIPE->value => new StripeGateway($config),
-            default => throw new Exception("Unsupported payment gateway: {$gateway}"),
+            default                       => throw new Exception("Unsupported payment gateway: {$gateway}"),
         };
     }
 
-    public function payment(array $data): array
-    {
-        $gateway = $this->getGateway($data['payment_gateway']);
+    public function payment(array $data): array {
+        $payment_gateway = $data['payment_gateway'] ?? config('paisapay.default_gateway');
+        $gateway = $this->getGateway($payment_gateway);
 
         // Pay the payment (currency validation happens in gateway)
         $response = $gateway->pay($data);
 
-        $transaction = null;
-
         // Create transaction record
-        DB::transaction(function () use (&$transaction, $response, $data) {
-            $transaction = Transaction::create([
-                'transaction_id' => $response['transaction_id'],
-                'amount' => $data['amount'],
-                'currency' => $data['currency'],
-                'type' => $data['type'] ?? 'one-time',
-                'payment_gateway' => $data['payment_gateway'],
-                'status' => $response['status'],
-                'metadata' => array_merge(
-                    $data['metadata'] ?? [],
-                    ['gateway_response' => $response]
-                ),
-            ]);
-        });
+        $transaction = Transaction::create([
+            'transaction_id'  => $response['transaction_id'],
+            'amount'          => $data['amount'],
+            'currency'        => $data['currency'] ?? config('paisapay.default_currency'),
+            'type'            => $data['type'] ?? 'one-time',
+            'payment_gateway' => $payment_gateway,
+            'status'          => $response['status'],
+            'metadata'        => array_merge(
+                $data['metadata'] ?? [],
+                ['gateway_response' => $response]
+            ),
+        ]);
 
         Event::dispatch(new TransactionCreated($transaction));
 
         return [
-            'transaction' => $transaction,
-            'checkout_url' => $response['checkout_url'] ?? null,
+            'transaction'      => $transaction,
+            'checkout_url'     => $response['checkout_url'] ?? null,
             'gateway_response' => $response,
         ];
     }
@@ -74,8 +66,7 @@ class PaymentService
     /**
      * Verify a transaction.
      */
-    public function verifyTransaction(string $transactionId): array
-    {
+    public function verifyTransaction(string $transactionId): array {
         $transaction = Transaction::where('transaction_id', $transactionId)->firstOrFail();
         $gateway = $this->getGateway($transaction->payment_gateway);
 
@@ -87,22 +78,21 @@ class PaymentService
             $metadata['gateway_response'] = $response;
 
             $transaction->update([
-                'status' => 'completed',
+                'status'   => 'completed',
                 'metadata' => $metadata,
             ]);
 
         }
-    
+
         Event::dispatch(new TransactionVerified($transaction, $response));
-    
+
         return $response;
     }
 
     /**
      * Get transaction by ID.
      */
-    public function getTransaction(string $transactionId): Transaction
-    {
+    public function getTransaction(string $transactionId): Transaction {
         return Transaction::where('transaction_id', $transactionId)->firstOrFail();
     }
 }

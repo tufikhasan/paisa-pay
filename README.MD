@@ -98,6 +98,7 @@ Add these to your `.env` file:
 ```env
 # Paisa Pay Settings
 PAISA_PAY_DEFAULT_GATEWAY=stripe
+PAISA_PAY_DEFAULT_CURRENCY=USD
 
 # Stripe Configuration
 STRIPE_ENABLED=true
@@ -140,8 +141,8 @@ use TufikHasan\PaisaPay\Facades\PaisaPay;
 
 $result = PaisaPay::payment([
     'amount' => 100.00,
-    'currency' => 'USD',
-    'payment_gateway' => 'stripe',
+    'currency' => 'USD', // optional
+    'payment_gateway' => 'stripe', // optional
     'type' => 'one-time', // optional
     'metadata' => ['order_id' => 123], // optional
 ]);
@@ -190,7 +191,7 @@ All routes are automatically registered under the `api/paisa-pay` prefix.
 
 **Endpoint:** `POST /api/paisa-pay/payment`
 
-**Request:**
+**Request:** (amount is required; currency, payment_gateway, type, metadata are optional)
 ```json
 {
     "amount": 100.00,
