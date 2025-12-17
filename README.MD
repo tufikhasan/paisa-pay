@@ -446,6 +446,92 @@ PaisaPay::payment([
 
 ---
 
+## Customization with Events
+
+This package fires several Laravel events that allow you to customize the transaction creation and verification process.
+
+### Available Events
+
+- `TufikHasan\PaisaPay\Events\TransactionCreated`: Fired after a transaction is created in the database.
+
+- `TufikHasan\PaisaPay\Events\TransactionVerifying`: Fired before verifying a transaction with the payment gateway. Use this to add custom pre-verification logic.
+
+- `TufikHasan\PaisaPay\Events\TransactionVerified`: Fired after verification is complete. Use this for post-verification processing.
+
+### Listening to Events
+
+In your `App\Providers\EventServiceProvider`, add listeners:
+
+```php
+protected $listen = [
+    \TufikHasan\PaisaPay\Events\TransactionVerifying::class => [
+        \App\Listeners\CustomVerificationLogic::class,
+    ],
+    \TufikHasan\PaisaPay\Events\TransactionVerified::class => [
+        \App\Listeners\PostVerificationActions::class,
+    ],
+];
+```
+
+Then, create the listeners to implement your custom logic, such as additional validation, sending notifications, or updating other models.
+
+### Example: Updating User Data on Payment Success
+
+When a user completes payment on Stripe's checkout page, they are redirected to the verify URL (`/api/paisa-pay/verify/{transactionId}`), which triggers the `TransactionVerified` event. You can listen to this event to update your application's data based on successful transactions.
+
+Create a listener:
+
+```php
+<?php
+
+namespace App\Listeners;
+
+use TufikHasan\PaisaPay\Events\TransactionVerified;
+use App\Models\User;
+use App\Models\Order;
+
+class UpdateUserSubscription
+{
+    public function handle(TransactionVerified $event)
+    {
+        $transaction = $event->transaction;
+        $response = $event->verificationResponse;
+
+        if ($response['success'] && $response['status'] === 'completed') {
+            // Update user's subscription status
+            $user = User::find($transaction->metadata['user_id']);
+            if ($user) {
+                $user->subscription_status = 'active';
+                $user->save();
+            }
+
+            // Update order status
+            $order = Order::find($transaction->metadata['order_id']);
+            if ($order) {
+                $order->status = 'paid';
+                $order->save();
+            }
+
+            // Add any other custom logic here
+        }
+    }
+}
+```
+
+Register the listener in `EventServiceProvider`:
+
+```php
+protected $listen = [
+    \TufikHasan\PaisaPay\Events\TransactionVerified::class => [
+        \App\Listeners\UpdateUserSubscription::class,
+    ],
+];
+```
+
+This allows you to set custom verification logic for various actions in your project, such as updating user statuses, sending emails, or modifying related tables upon successful payment verification.
+
+---
+
 ## Adding New Payment Gateways
 
 1. **Add to PaymentGateway Enum:**

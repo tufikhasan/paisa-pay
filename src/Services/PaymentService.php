@@ -6,8 +6,12 @@ use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use TufikHasan\PaisaPay\Gateways\StripeGateway;
 use TufikHasan\PaisaPay\Models\Transaction;
 use TufikHasan\PaisaPay\Enums\PaymentGateway;
+use TufikHasan\PaisaPay\Events\TransactionCreated;
+use TufikHasan\PaisaPay\Events\TransactionVerifying;
+use TufikHasan\PaisaPay\Events\TransactionVerified;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 
 class PaymentService
 {
@@ -58,6 +62,8 @@ class PaymentService
             ]);
         });
 
+        Event::dispatch(new TransactionCreated($transaction));
+
         return [
             'transaction' => $transaction,
             'checkout_url' => $response['checkout_url'] ?? null,
@@ -86,7 +92,9 @@ class PaymentService
             ]);
 
         }
-
+    
+        Event::dispatch(new TransactionVerified($transaction, $response));
+    
         return $response;
     }
 

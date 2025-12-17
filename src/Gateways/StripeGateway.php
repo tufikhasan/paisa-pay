@@ -17,7 +17,7 @@ class StripeGateway extends AbstractGateway
     }
 
     /**
-     * Process a payment pay via Stripe.
+     * Process a payment via Stripe.
      */
     public function pay(array $data): array
     {
