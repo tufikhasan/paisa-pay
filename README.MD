@@ -113,6 +113,8 @@ The `config/paisapay.php` file allows you to configure:
 ```php
 return [
     'default_gateway' => env('PAISA_PAY_DEFAULT_GATEWAY', 'stripe'),
+
+    'default_currency' => env('PAISA_PAY_DEFAULT_CURRENCY', 'USD'),
     
     'gateways' => [
         'stripe' => [
