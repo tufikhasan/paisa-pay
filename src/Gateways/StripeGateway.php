@@ -45,7 +45,7 @@ class StripeGateway extends AbstractGateway
                 ],
 
                 'mode' => 'payment',
-                'success_url' => url('api/paisa-pay/verify/{CHECKOUT_SESSION_ID}'),
+                'success_url' => url(rtrim(config('paisapay.route_prefix', 'api/paisa-pay'), '/'). "/verify/{CHECKOUT_SESSION_ID}"),
                 'cancel_url' => route('paisa-pay.failed'),
             ];
 

@@ -99,6 +99,7 @@ Add these to your `.env` file:
 # Paisa Pay Settings
 PAISA_PAY_DEFAULT_GATEWAY=stripe
 PAISA_PAY_DEFAULT_CURRENCY=USD
+PAISA_PAY_ROUTE_PREFIX=api/paisa-pay
 
 # Stripe Configuration
 STRIPE_ENABLED=true
@@ -115,6 +116,8 @@ return [
     'default_gateway' => env('PAISA_PAY_DEFAULT_GATEWAY', 'stripe'),
 
     'default_currency' => env('PAISA_PAY_DEFAULT_CURRENCY', 'USD'),
+
+    'route_prefix' => env('PAISA_PAY_ROUTE_PREFIX', 'api/paisa-pay'),
     
     'gateways' => [
         'stripe' => [
@@ -187,7 +190,7 @@ echo $transaction->currency;
 
 ### Method 2: Using API Routes (HTTP)
 
-All routes are automatically registered under the `api/paisa-pay` prefix.
+All routes are automatically registered under the `api/paisa-pay` prefix (configurable via `PAISA_PAY_ROUTE_PREFIX` env variable).
 
 #### Process Payment
 
