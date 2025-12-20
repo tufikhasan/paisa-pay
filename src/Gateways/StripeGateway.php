@@ -22,10 +22,11 @@ class StripeGateway extends AbstractGateway
     public function pay(array $data): array
     {
         try {
+            $currency = $data['currency'] ?? config('paisapay.default_currency');
             // Validate currency is supported
-            $this->validateCurrency($data['currency']);
+            $this->validateCurrency($currency);
 
-            $currency = strtolower($data['currency']);
+            $currency = strtolower($currency);
             $amount = (float) ($data['amount'] * 100);
 
             $sessionConfig = [
