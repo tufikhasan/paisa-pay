@@ -460,6 +460,8 @@ This package fires several Laravel events that allow you to customize the transa
 
 - `TufikHasan\PaisaPay\Events\TransactionCreated`: Fired after a transaction is created in the database.
 
+- `TufikHasan\PaisaPay\Events\TransactionFailed`: Fired when a transaction fails during payment processing or verification.
+
 - `TufikHasan\PaisaPay\Events\TransactionVerifying`: Fired before verifying a transaction with the payment gateway. Use this to add custom pre-verification logic.
 
 - `TufikHasan\PaisaPay\Events\TransactionVerified`: Fired after verification is complete. Use this for post-verification processing.

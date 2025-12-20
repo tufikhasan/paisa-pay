@@ -3,7 +3,6 @@
 namespace TufikHasan\PaisaPay\Services;
 
 use Exception;
-use Illuminate\Support\Facades\Event;
 use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use TufikHasan\PaisaPay\Enums\PaymentGateway;
 use TufikHasan\PaisaPay\Events\TransactionCreated;
@@ -53,8 +52,7 @@ class PaymentService {
                 ['gateway_response' => $response]
             ),
         ]);
-
-        Event::dispatch(new TransactionCreated($transaction));
+        event(new TransactionCreated($transaction));
 
         return [
             'transaction'      => $transaction,
@@ -82,9 +80,13 @@ class PaymentService {
                 'metadata' => $metadata,
             ]);
 
+            event(new TransactionVerified($transaction, $response));
+
         }
 
-        Event::dispatch(new TransactionVerified($transaction, $response));
+        if (!$response['success']) {
+            event(new TransactionFailed($transaction));
+        }
 
         return $response;
     }
