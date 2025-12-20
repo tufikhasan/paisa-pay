@@ -7,6 +7,7 @@ use TufikHasan\PaisaPay\Contracts\PaymentGatewayInterface;
 use TufikHasan\PaisaPay\Enums\PaymentGateway;
 use TufikHasan\PaisaPay\Events\TransactionCreated;
 use TufikHasan\PaisaPay\Events\TransactionVerified;
+use TufikHasan\PaisaPay\Events\TransactionFailed;
 use TufikHasan\PaisaPay\Gateways\StripeGateway;
 use TufikHasan\PaisaPay\Models\Transaction;
 
@@ -64,31 +65,35 @@ class PaymentService {
     /**
      * Verify a transaction.
      */
-    public function verifyTransaction(string $transactionId): array {
-        $transaction = Transaction::where('transaction_id', $transactionId)->firstOrFail();
-        $gateway = $this->getGateway($transaction->payment_gateway);
+    public function verifyTransaction(string $transactionId) {
+        try {
+            $transaction = Transaction::where('transaction_id', $transactionId)->firstOrFail();
+            $gateway = $this->getGateway($transaction->payment_gateway);
 
-        $response = $gateway->verify($transactionId);
+            $response = $gateway->verify($transactionId);
 
-        // Update transaction if verification was successful
-        if ($response['success'] && $response['status'] === 'completed') {
-            $metadata = $transaction->metadata ?? [];
-            $metadata['gateway_response'] = $response;
+            // Update transaction if verification was successful
+            if ($response['success'] && $response['status'] === 'completed') {
+                $metadata = $transaction->metadata ?? [];
+                $metadata['gateway_response'] = $response;
 
-            $transaction->update([
-                'status'   => 'completed',
-                'metadata' => $metadata,
-            ]);
+                $transaction->update([
+                    'status'   => 'completed',
+                    'metadata' => $metadata,
+                ]);
 
-            event(new TransactionVerified($transaction, $response));
+                event(new TransactionVerified($transaction, $response));
 
-        }
+            }
 
-        if (!$response['success']) {
+            if (!$response['success']) {
+                event(new TransactionFailed($transaction));
+            }
+
+            return $response;
+        } catch (Exception $e) {
             event(new TransactionFailed($transaction));
         }
-
-        return $response;
     }
 
     /**
